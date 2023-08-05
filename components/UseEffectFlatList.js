@@ -1,37 +1,57 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Example_useEffect = () => {
+const UseEffectFlatList = () => {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    //Fetch data from the API using axios.
     axios.get("https://jsonplaceholder.typicode.com/posts")
       .then((response) => {
-        //Handle successful response.
+        //Handle successful response
         setData(response.data);
+        setIsLoading(false);
       })
       .catch(() => {
         //Handle error
         console.error("Error fetching data:", error);
+        setIsLoading(false);
       });
   }, []); //The empty dependency array ensures this effect runs only once when the component mounts.
 
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Posts from API: </Text>
-      {data.map((post) => (
-        <View key={post.id} style={styles.post}>
-          <Text style={styles.postTitle}>{post.title}</Text>
-          <Text>{post.body}</Text>
-        </View>
-      ))}
+      <Text style={styles.title}>Posts from API using FlatList</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.post}>
+            <Text style={styles.postTitle}>{item.title}</Text>
+            <Text>{item.body}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 };
 
-export default Example_useEffect;
+export default UseEffectFlatList;
 
 const styles = StyleSheet.create({
   container: {
