@@ -58,7 +58,7 @@ const News = () => {
       ) : (
         <FlatList
           data={articles}
-          keyExtractor={(index) => index.toString()}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={_renderItem}
           refreshing={loading}
           onRefresh={_onRefresh}
