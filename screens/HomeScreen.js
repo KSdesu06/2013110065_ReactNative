@@ -7,13 +7,10 @@ const HomeScreen = ({ navigation }) => {
       <Text>Home Screen</Text>
       <Text>{"\n"}</Text>
       <Button
-        title="Go to Details"
+        title="Go to Product"
         onPress={() => {
           // 1. Navigate to the Details route with params
-          navigation.navigate("Details", {
-            itemId: 1088,
-            otherParam: "React Native App",
-          });
+          navigation.navigate("Product");
         }}
       />
     </View>

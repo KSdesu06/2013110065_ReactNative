@@ -10,41 +10,34 @@ import {
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const ProductScreen = ({navigation}) => {
-  const [product, setProduct] = useState([]);
+const DetailProduct = ({ route }) => {
+  const { courseId } = route.params;
+  const [courseDetail, setCourseDetail] = useState({});
 
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(
-        "https://api.codingthailand.com/api/course"
+        `https://api.codingthailand.com/api/course/${courseId}`
       );
-      setProduct(response.data.data);
+      setCourseDetail(response.data.data);
     };
     getData();
-  }, []);
+  }, [courseId]);
 
   return (
     <View>
       <FlatList
-        data={product}
-        keyExtractor={(item, index) => item.id.toString()}
+        data={courseDetail}
+        keyExtractor={(item, index) => item.id}
         renderItem={({ item }) => (
-          <View> 
-            <TouchableOpacity 
-              style={styles.container}
-              onPress={() => {
-                // 1. Navigate to the Details route with params
-                navigation.navigate("Details", {courseId: item.id});
-              }}
-            >
-              <Image style={styles.thumbnail} source={{ uri: item.picture }} />
-              <View style={styles.dataContainer}>
-                <View style={styles.dataContent}>
-                  <Text style={styles.title}>{item.title}</Text>
-                  <Text style={styles.detail}>{item.detail}</Text>
-                </View>
+          <View>
+            <Image style={styles.thumbnail} source={{ uri: item.picture }} />
+            <View style={styles.dataContainer}>
+              <View style={styles.dataContent}>
+                <Text style={styles.title}>{item.ch_title}</Text>
+                <Text>{item.ch_dateadd}</Text>
               </View>
-            </TouchableOpacity>
+            </View>
             <View style={styles.addButton} />
           </View>
         )}
@@ -53,7 +46,7 @@ const ProductScreen = ({navigation}) => {
   );
 };
 
-export default ProductScreen;
+export default DetailProduct;
 
 const styles = StyleSheet.create({
   container: {

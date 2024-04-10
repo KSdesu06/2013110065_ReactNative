@@ -1,84 +1,85 @@
+import "react-native-gesture-handler";
 import { View, Text } from "react-native";
 import React from "react";
-
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import HomeScreen from './screens/HomeScreen'
+// import ProductScreen from "./components/ProductScreen";
 
-function Feed() {
+import CustomSideBarMenu from "./pages/CustomSideBarMenu";
+// import DetailProduct from "./screens/DetailProduct";
+import DetailWeater from "./screens/DetailWeather";
+import WeatherScreen from "./screens/WeatherScreen";
+
+// function HomeScreenStack() {
+//   return (
+//     <Stack.Navigator
+//       initialRouteName="Home"
+//       screenOptions={{ headerShown: false }}
+//     >
+//       <Stack.Screen
+//         name="Home"
+//         component={HomeScreen}
+//         options={{ title: "Home" }}
+//       />
+      
+//     </Stack.Navigator>
+//   );
+// }
+
+function WeatherScreenStack() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Feed</Text>
-    </View>
-  );
-}
-
-function Profile() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Profile</Text>
-    </View>
-  );
-}
-
-function Notification() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Notifications</Text>
-    </View>
-  );
-}
-
-function MyTabs() {
-  return (
-    <Tab.Navigator
-      initialRouteName="Feed"
-      activeColor="#e91e63"
-      labelStyle={{ fontSize: 12 }}
-      style={{ backgroundColor: "tomato" }}
+    <Stack.Navigator
+      initialRouteName="Weather"
+      screenOptions={{ headerShown: true }}
     >
-      <Tab.Screen
-        name="Feed"
-        component={Feed}
-        options={{ 
-          tabBarLabel: "Home",
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
-          )
-        }}
+      <Stack.Screen
+        name="Weather"
+        component={WeatherScreen}
+        options={{ title: "Weather" }}
       />
-      <Tab.Screen
-        name="Notification"
-        component={Notification}
-        options={{ 
-          tabBarLabel: "Updates",
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="bell" color={color} size={26} />
-          )
-        }}
+      <Stack.Screen
+        name="Details"
+        component={DetailWeater}
+        options={{ title: "Details" }}
       />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{ 
-          tabBarLabel: "Profile",
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
-          )
-        }}
-      />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 }
 
-const Tab = createMaterialBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: "#f0f8ff",
+          width: 240,
+        },
+      }}
+      drawerContent={(props) => <CustomSideBarMenu {...props} />}
+    >
+      {/* <Drawer.Screen
+        name="HomeDrawer"
+        component={HomeScreenStack}
+        options={{ drawerLabel: "Home" }}
+      /> */}
+      <Drawer.Screen
+        name="Weather"
+        component={WeatherScreenStack}
+      />
+    </Drawer.Navigator>
+  );
+}
 
 const App = () => {
   return (
     <NavigationContainer>
-      <MyTabs />
+      <MyDrawer />
     </NavigationContainer>
   );
 };
